@@ -1,2 +1,8 @@
 # Ants
-Basic simulation of ant colony.
+---
+A small Java app that simulates an ant colony.
+
+To compile and run:
+```bash
+./build.sh
+```
