@@ -138,6 +138,19 @@ public class Ants extends JFrame implements Runnable, MouseListener, KeyListener
       double x = (width / gridSize) * i;
       g2d.draw(new Line2D.Double(x, 0, x, height));
     }
+
+    // Draw cells
+    for (int i = 0; i < gridSize; i++) {
+      for (int j = 0; j < gridSize; j++) {
+        double w = (width / gridSize);
+        double h = (height / gridSize);
+        double x = w * i;
+        double y = h * j;
+        float initialLevel = rand.nextFloat();
+        Cell c = new Cell(initialLevel);
+        c.draw(g2d, x, y, w, h);
+      }
+    }
   }
 
   public void drawData() {
