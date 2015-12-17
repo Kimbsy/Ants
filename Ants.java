@@ -24,7 +24,7 @@ import java.util.List;
 import javax.swing.*;
 
 // Primary game class
-public class Ants extends JFrame implements Runnable, MouseListener, KeyListener {
+public class Ants extends JFrame implements Runnable, MouseListener, MouseMotionListener, KeyListener {
 
   // Main thread becomes the app loop
   Thread loop;
@@ -36,8 +36,8 @@ public class Ants extends JFrame implements Runnable, MouseListener, KeyListener
   Graphics2D g2d;
 
   // Width/height of frame
-  int width = 900;
-  int height = 900;
+  int width = 1000;
+  int height = 1000;
 
   // Size of grid
   int gridSize = 50;
@@ -94,6 +94,7 @@ public class Ants extends JFrame implements Runnable, MouseListener, KeyListener
 
     // For mouse input
     addMouseListener(this);
+    addMouseMotionListener(this);
 
     // For keyboard input
     addKeyListener(this);
@@ -231,6 +232,9 @@ public class Ants extends JFrame implements Runnable, MouseListener, KeyListener
     calcFrameRate();
   }
 
+  /**
+   * Allow the cells to perform their update() method.
+   */
   public void updateCells() {
     synchronized (cells) {
       Iterator<Cell> cellIterator = cells.iterator();
@@ -241,8 +245,26 @@ public class Ants extends JFrame implements Runnable, MouseListener, KeyListener
     }
   }
 
+  /**
+   * Get the cell at specific coordinates.
+   *
+   * @param  int x
+   *   The x coordinate.
+   * @param  int y
+   *   The y coordinate.
+   *
+   * @return Cell
+   *   The cell at (x, y).
+   */
+  public Cell getCell(int x, int y) {
+    Cell c = cells.get(y + (x * gridSize));
+    return c;
+  }
+
+  /**
+   * Calculate frame rate
+   */
   public void calcFrameRate() {
-    // Calculate frame rate
     frameCount++;
     if(System.currentTimeMillis() > startTime+1000) {
       startTime  = System.currentTimeMillis();
@@ -263,13 +285,41 @@ public class Ants extends JFrame implements Runnable, MouseListener, KeyListener
     checkButton(e);
   }
 
-  public void mousePressed(MouseEvent e) { }
+  public void mousePressed(MouseEvent e) {
+    // Do nothing...
+  }
 
-  public void mouseReleased(MouseEvent e) { }
+  public void mouseReleased(MouseEvent e) {
+    // Do nothing...
+  }
 
-  public void mouseExited(MouseEvent e) { }
+  public void mouseExited(MouseEvent e) {
+    // Do nothing...
+  }
 
-  public void mouseEntered(MouseEvent e) { }
+  public void mouseEntered(MouseEvent e) {
+    // Do nothing...
+  }
+
+  /**
+   * MouseMotionListener moved event.
+   *
+   * Refill the pheremone levels of the cell the mouse is in.
+   *
+   * @param java.awt.event.MouseEvent e
+   *   The mouse event.
+   */
+  public void mouseMoved(MouseEvent e) {
+    int xCoord = ((e.getX() * gridSize) / width);
+    int yCoord = ((e.getY() * gridSize) / height);
+
+    Cell c = getCell(xCoord, yCoord);
+    c.setPheremoneLevel(1);
+  }
+
+  public void mouseDragged(MouseEvent e) {
+    // Do nothing...
+  }
 
   /**
    * Custom method to get mouse button status.
@@ -301,5 +351,7 @@ public class Ants extends JFrame implements Runnable, MouseListener, KeyListener
     int keycode = k.getKeyCode();
   }
 
-  public void keyTyped(KeyEvent k) { }
+  public void keyTyped(KeyEvent k) {
+    // Do nothing...
+  }
 }
