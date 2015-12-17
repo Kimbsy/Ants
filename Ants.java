@@ -37,7 +37,10 @@ public class Ants extends JFrame implements Runnable, MouseListener, KeyListener
 
   // Width/height of frame
   int width = 900;
-  int height = 600;
+  int height = 900;
+
+  // Size of grid
+  int gridSize = 20;
 
   // Create identity transform
   AffineTransform identity = new AffineTransform();
@@ -69,7 +72,7 @@ public class Ants extends JFrame implements Runnable, MouseListener, KeyListener
    */
   public Ants() {
     super("Life_2.2");
-    setSize(900, 600); // 32 is for JFrame top bar
+    setSize(width, height); // 32 is for JFrame top bar
     setVisible(true);
     setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
@@ -83,7 +86,7 @@ public class Ants extends JFrame implements Runnable, MouseListener, KeyListener
    */
   public void init() {
     // Create the backbuffer for smooth-ass graphics
-    backbuffer = new BufferedImage(width + 200, height, BufferedImage.TYPE_INT_RGB);
+    backbuffer = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
     g2d = backbuffer.createGraphics();
 
     // For mouse input
@@ -110,20 +113,39 @@ public class Ants extends JFrame implements Runnable, MouseListener, KeyListener
     g2d.setColor(Color.BLACK);
     g2d.fillRect(0, 0, width, height);
     g2d.setColor(Color.WHITE);
-    g2d.fillRect(900, 0, 0, height);
+    g2d.fillRect(width, 0, 0, height);
 
     // Draw the things.
-    printData();
+    drawGrid();
+    drawData();
   }
 
-  public void printData() {
+  public void drawGrid() {
+    // Set to origin
+    g2d.setTransform(identity);
+
+    // Set color
+    g2d.setColor(new Color(0, 0, 1, 0.5f));
+
+    // Draw horizontal lines
+    for (int i = 0; i < gridSize; i++) {
+      double y = (height / gridSize) * i;
+      g2d.draw(new Line2D.Double(0, y, width, y));
+    }
+
+    // Draw vertical lines
+    for (int i = 0; i < gridSize; i++) {
+      double x = (width / gridSize) * i;
+      g2d.draw(new Line2D.Double(x, 0, x, height));
+    }
+  }
+
+  public void drawData() {
     // Set to origin
     g2d.setTransform(identity);
 
     // Indent
     g2d.translate(15, 10);
-    g2d.setColor(new Color(0, 0, 1, 0.5f));
-    g2d.setFont(font);
 
     // Set font
     g2d.setColor(new Color(0, 1, 0.5f, 0.5f));
