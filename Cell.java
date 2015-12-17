@@ -22,7 +22,11 @@ import java.awt.*;
 public class Cell { 
 
   // The level of pheremones in this cell
-  float pheremoneLevel;
+  private float pheremoneLevel;
+
+  // Coordinates and size
+  private double x, y;
+  private double w, h;
 
 
   /**
@@ -43,16 +47,59 @@ public class Cell {
     return this;
   }
 
-  public void incPheremoneLevel(int i) {
-    this.pheremoneLevel += i;
+  public void incPheremoneLevel(float i) {
+    float newValue = pheremoneLevel + i;
+
+    if (newValue < 1 && newValue > 0) {
+      this.pheremoneLevel += i;
+    }
+  }
+
+  public double getX() {
+    return this.x;
+  }
+
+  public Cell setX(double x) {
+    this.x = x;
+    return this;
+  }
+
+  public double getY() {
+    return this.y;
+  }
+
+  public Cell setY(double y) {
+    this.y = y;
+    return this;
+  }
+
+  public double getW() {
+    return this.w;
+  }
+
+  public Cell setW(double w) {
+    this.w = w;
+    return this;
+  }
+
+  public double getH() {
+    return this.h;
+  }
+
+  public Cell setH(double h) {
+    this.h = h;
+    return this;
   }
 
 
 
-  public void draw(Graphics2D g2d, double x, double y, double w, double h) {
-    float intensity = this.pheremoneLevel;
 
-    g2d.setColor(new Color(1, 1, 1, intensity));
-    g2d.fillRect((int) x, (int) y, (int) w, (int) h);
+  public void draw(Graphics2D g2d) {
+    g2d.setColor(new Color(1, 1, 1, this.pheremoneLevel));
+    g2d.fillRect((int) this.x, (int) this.y, (int) this.w, (int) this.h);
+  }
+
+  public void update() {
+    this.incPheremoneLevel(-0.0015f);
   }
 }

@@ -40,7 +40,7 @@ public class Ants extends JFrame implements Runnable, MouseListener, KeyListener
   int height = 900;
 
   // Size of grid
-  int gridSize = 20;
+  int gridSize = 100;
 
   // Create identity transform
   AffineTransform identity = new AffineTransform();
@@ -62,6 +62,9 @@ public class Ants extends JFrame implements Runnable, MouseListener, KeyListener
   // Frame rate counters and other timing variables
   int frameCount = 0, frameRate = 0;
   long startTime = System.currentTimeMillis();
+
+  // Cell ArrayList
+  List<Cell> cells = Collections.synchronizedList(new ArrayList<Cell>());
 
   public static void main(String[] args) {
     new Ants();
@@ -94,6 +97,27 @@ public class Ants extends JFrame implements Runnable, MouseListener, KeyListener
 
     // For keyboard input
     addKeyListener(this);
+
+    // Create cells
+    initCells();
+  }
+
+  public void initCells() {
+    for (int i = 0; i < gridSize; i++) {
+      for (int j = 0; j < gridSize; j++) {
+        double w = (width / gridSize);
+        double h = (height / gridSize);
+        double x = w * i;
+        double y = h * j;
+        float initialLevel = rand.nextFloat();
+        Cell c = new Cell(initialLevel);
+        c.setX(x);
+        c.setY(y);
+        c.setW(w);
+        c.setH(h);
+        cells.add(c);
+      }
+    }
   }
 
   /**
@@ -120,6 +144,9 @@ public class Ants extends JFrame implements Runnable, MouseListener, KeyListener
     drawData();
   }
 
+  /**
+   * Draw the grid of cells to the screen, then get each cell to draw itself.
+   */
   public void drawGrid() {
     // Set to origin
     g2d.setTransform(identity);
@@ -140,19 +167,19 @@ public class Ants extends JFrame implements Runnable, MouseListener, KeyListener
     }
 
     // Draw cells
-    for (int i = 0; i < gridSize; i++) {
-      for (int j = 0; j < gridSize; j++) {
-        double w = (width / gridSize);
-        double h = (height / gridSize);
-        double x = w * i;
-        double y = h * j;
-        float initialLevel = rand.nextFloat();
-        Cell c = new Cell(initialLevel);
-        c.draw(g2d, x, y, w, h);
+    synchronized (cells) {
+      Iterator<Cell> cellIterator = cells.iterator();
+      while (cellIterator.hasNext()) {
+        Cell c = (Cell) cellIterator.next();
+        c.draw(g2d);
       }
     }
+
   }
 
+  /**
+   * Print information to the screen
+   */
   public void drawData() {
     // Set to origin
     g2d.setTransform(identity);
@@ -166,7 +193,7 @@ public class Ants extends JFrame implements Runnable, MouseListener, KeyListener
 
     // Write framecount to screen
     g2d.translate(0, 30);
-    g2d.drawString("frameCount: " + dataNum, 5, 0);
+    g2d.drawString("frameRate: " + frameRate, 5, 0);
   }
 
   public void run() {
@@ -176,9 +203,9 @@ public class Ants extends JFrame implements Runnable, MouseListener, KeyListener
     // Keep going as long as the thread is alive
     while(t == loop) {
       try {
-        // Target framerate is 50fps
+        // Target framerate is 100fps
         appUpdate();
-        Thread.sleep(20);
+        Thread.sleep(10);
       } catch(InterruptedException e) {
         e.printStackTrace();
       }
@@ -198,11 +225,20 @@ public class Ants extends JFrame implements Runnable, MouseListener, KeyListener
    * Move and animate objects in the app.
    */
   public void appUpdate() {
-
-    // @TODO: Do things..
+    updateCells();
 
     dataNum++;
     calcFrameRate();
+  }
+
+  public void updateCells() {
+    synchronized (cells) {
+      Iterator<Cell> cellIterator = cells.iterator();
+      while (cellIterator.hasNext()) {
+        Cell c = (Cell) cellIterator.next();
+        c.update();
+      }
+    }
   }
 
   public void calcFrameRate() {
