@@ -40,7 +40,7 @@ public class Ants extends JFrame implements Runnable, MouseListener, KeyListener
   int height = 900;
 
   // Size of grid
-  int gridSize = 100;
+  int gridSize = 50;
 
   // Create identity transform
   AffineTransform identity = new AffineTransform();
