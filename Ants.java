@@ -40,7 +40,7 @@ public class Ants extends JFrame implements Runnable, MouseListener, MouseMotion
   int height = 1000;
 
   // Size of grid
-  int gridSize = 50;
+  int gridSize = 100;
 
   // Create identity transform
   AffineTransform identity = new AffineTransform();
@@ -57,7 +57,7 @@ public class Ants extends JFrame implements Runnable, MouseListener, MouseMotion
   int mouseButton;
 
   // Font for displaying data
-  Font font = new Font("Courier", Font.PLAIN, 12);
+  Font font = new Font("Courier", Font.BOLD, 20);
 
   // Frame rate counters and other timing variables
   int frameCount = 0, frameRate = 0;
@@ -186,7 +186,7 @@ public class Ants extends JFrame implements Runnable, MouseListener, MouseMotion
     g2d.setTransform(identity);
 
     // Indent
-    g2d.translate(15, 10);
+    g2d.translate(15, 20);
 
     // Set font
     g2d.setColor(new Color(0, 1, 0.5f, 0.5f));
