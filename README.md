@@ -1,6 +1,6 @@
 # Ants
 ---
-A small Java app that simulates an ant colony.
+A small Python app that simulates an ant colony.
 
 To compile and run:
 ```bash
@@ -9,7 +9,7 @@ To compile and run:
 
 
 ```
-Condition:                                 |     Action:
+Condition:                                 |    Action:
 Not carrying food not on pheromone trail   |    walk randomly lay pheromone
 Not carrying food on pheromone trail       |    follow pheromone trail lay more pheromone
 Reach home without food on pheromone trail |    turn around follow trail in opposite direction
