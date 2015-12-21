@@ -1,2 +1,1 @@
-javac *.java && java Ants
-
+python Ants.py
