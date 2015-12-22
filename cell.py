@@ -17,8 +17,8 @@ class Cell:
     self.h = dimens[1] / grid_size
 
     # Set x and y coords
-    self.x = self.w * i;
-    self.y = self.h * j;
+    self.x = self.w * i
+    self.y = self.h * j
 
   # Set the Cell's pheremone level
   def set_pheremone_level(self, pheremone_level):

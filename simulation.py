@@ -1,5 +1,6 @@
 from __future__ import division 
 from cell import Cell
+from colony import Colony
 import math
 
 class Simulation:
@@ -11,6 +12,9 @@ class Simulation:
     self.grid_size = 0
     self.cells = []
     self.dimens = surface.get_size()
+
+    # Initialize the colony
+    self.colony = Colony(50, 50)
 
   # Stop the app
   def stop(self):
@@ -40,6 +44,9 @@ class Simulation:
       for cell in cell_row:
         cell.update()
 
+    # Update the colony
+    self.colony.update(self.dimens)
+
   # Get the cell at the given mouse position
   def get_cell_at(self, pos):
     # Get position ad dimensions
@@ -63,8 +70,12 @@ class Simulation:
     cell = self.get_cell_at(mouse_pos)
     cell.set_pheremone_level(255)
 
-  # Draw cells to surface
+  # Draw things to surface
   def render(self, surface):
+    # Draw cells
     for cell_row in self.cells:
       for cell in cell_row:
         cell.render(surface)
+
+    # Draw colony
+    self.colony.render(surface)

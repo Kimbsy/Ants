@@ -1,8 +1,8 @@
 import pygame
-from colony_simulation import Simulation
+from simulation import Simulation
 from event_handler import EventHandler
 
-# Initialize 
+# Initialize PyGame
 pygame.init()
 pygame.display.set_caption('Ants')
 
