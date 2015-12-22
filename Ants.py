@@ -20,7 +20,7 @@ e_handler = EventHandler()
 
 # Define colors
 WHITE = (255, 255, 255)
-BLACK = (0, 0, 0)
+BLACK = (  0,   0,   0)
 
 # Used to manage how fast the screen updates
 clock = pygame.time.Clock()

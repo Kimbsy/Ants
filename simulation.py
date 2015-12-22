@@ -14,7 +14,7 @@ class Simulation:
     self.dimens = surface.get_size()
 
     # Initialize the colony
-    self.colony = Colony(self, 20, 20)
+    self.colony = Colony(self, int(self.dimens[0] / 2), int(self.dimens[1] / 2))
 
   # Stop the app
   def stop(self):
