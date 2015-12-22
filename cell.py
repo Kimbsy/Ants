@@ -1,3 +1,4 @@
+from __future__ import division 
 import pygame
 from random import randint
 
@@ -10,7 +11,8 @@ class Cell:
     self.color = (255, 0, 0)
 
     # Set initial pheremone level
-    self.pheremone_level = randint(0, 255)
+    # self.pheremone_level = randint(0, 255)
+    self.pheremone_level = 0
 
     # Set width and height
     self.w = dimens[0] / grid_size

@@ -12,7 +12,7 @@ surface = pygame.display.set_mode(size)
 
 # Initialize simulation
 sim = Simulation(surface)
-sim.set_grid_size(50)
+sim.set_grid_size(75)
 sim.init_cells(surface)
 
 # Initialize event handler
@@ -48,8 +48,8 @@ while sim.is_running:
   # Update the screen with whats been drawn.
   pygame.display.flip()
 
-  # Limit to 50 FPS
-  clock.tick(50)
+  # # Limit to 50 FPS
+  # clock.tick(50)
 
   frame_count = frame_count + 1
 

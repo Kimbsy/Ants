@@ -2,9 +2,13 @@ import pygame
 from ant import Ant
 
 class Colony:
+  """Colony class creates ants and acts as their nest"""
 
   # Constructor
-  def __init__(self, x, y):
+  def __init__(self, sim, x, y):
+    # Keep reference to Simulation
+    self.sim = sim
+
     # Set position
     self.x = x
     self.y = y

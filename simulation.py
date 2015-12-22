@@ -14,7 +14,7 @@ class Simulation:
     self.dimens = surface.get_size()
 
     # Initialize the colony
-    self.colony = Colony(50, 50)
+    self.colony = Colony(self, 20, 20)
 
   # Stop the app
   def stop(self):
@@ -47,7 +47,7 @@ class Simulation:
     # Update the colony
     self.colony.update(self.dimens)
 
-  # Get the cell at the given mouse position
+  # Get the cell at the given position
   def get_cell_at(self, pos):
     # Get position ad dimensions
     width = self.dimens[0]
@@ -56,18 +56,17 @@ class Simulation:
     y = pos[1]
 
     # Calculate grid coordinates
-    grid_x = int(math.floor((x / width) * self.grid_size))
-    grid_y = int(math.floor((y / height) * self.grid_size))
+    grid_x = int(((x / width) * self.grid_size))
+    grid_y = int(((y / height) * self.grid_size))
 
     # Get Cell at coordinates
     cell = self.cells[grid_x][grid_y]
     return cell
 
-
-  # Reset the pheremone levels in the cell moved over
-  def reset_cell(self, mouse_pos):
+  # Reset the pheremone levels in the cell at a position
+  def reset_cell(self, pos):
     # Find the cell to update
-    cell = self.get_cell_at(mouse_pos)
+    cell = self.get_cell_at(pos)
     cell.set_pheremone_level(255)
 
   # Draw things to surface

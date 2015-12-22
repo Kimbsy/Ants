@@ -1,9 +1,13 @@
 import pygame
 
 class Ant:
+  """Ant class"""
 
   # Constructor
   def __init__(self, colony):
+    # Keep reference to Colony
+    self.colony = colony
+
     # Set position and dimensions
     self.x = colony.x
     self.y = colony.y
@@ -27,28 +31,38 @@ class Ant:
   def update(self, dimens):
     self.update_pos(dimens)
     self.update_energy()
+    self.leave_pheremones()
 
   # Update the ant's position
   def update_pos(self, dimens):
-    new_x = self.x + 1
-    new_y = self.y + 1
+    new_x = self.x + 2
+    new_y = self.y + 2
 
-    if new_x < 0:
-      new_x = dimens[0]
-    if new_x > dimens[0]:
-      new_x = 0
+    new_pos = [new_x, new_y]
 
-    if new_y < 0:
-      new_y = dimens[1]
-    if new_y > dimens[1]:
-      new_y = 0
+    new_pos = self.bound_pos(new_pos, dimens)
 
-    self.x = new_x
-    self.y = new_y
+    self.x = new_pos[0]
+    self.y = new_pos[1]
+
+  # Make sure the position doesn't go off screen
+  def bound_pos(self, pos, dimens):
+    new_pos = []
+
+    for i, d in enumerate(pos):
+      d = d % dimens[i]
+      new_pos.append(d)
+
+    return new_pos
 
   # Update the ant's energy level
   def update_energy(self):
     self.increment_energy(-1)
+
+  # Increse pheremone level in current cell
+  def leave_pheremones(self):
+    cell = self.colony.sim.get_cell_at((self.x, self.y))
+    cell.inc_pheremone_level(40)
 
   # Get the rectangle to draw
   def get_rect(self):
