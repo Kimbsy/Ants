@@ -24,7 +24,7 @@ class Ant:
     self.color = (255, 0, 0)
 
     # Set starting energy level
-    self.energy = 1000
+    self.energy = 500
 
   # Change the energy level of the ant
   def increment_energy(self, i):
@@ -32,6 +32,8 @@ class Ant:
 
     if new >= 0:
       self.energy = new
+    else:
+      self.colony.kill(self)
 
   # Change the direction timer of the ant
   def inc_direction_timer(self, i):

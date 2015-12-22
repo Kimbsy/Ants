@@ -17,13 +17,14 @@ class Colony:
     self.radius = 10
     self.color = (0, 0, 255)
 
-    spawn_rate = 1
+    self.spawn_rate = 50
 
     # Instantiate the list of ants for this colony
     self.ants = []
 
-    # Create first ant
-    self.spawn()
+    # Create initil ants
+    for i in range(0, self.spawn_rate):
+      self.spawn()
 
   # Update all ants in coloy
   def update(self, dimens):
@@ -44,3 +45,7 @@ class Colony:
   def spawn(self):
     ant = Ant(self)
     self.ants.append(ant)
+
+  # Kill specified ant
+  def kill(self, ant):
+    self.ants.remove(ant)
