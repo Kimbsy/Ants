@@ -1,1 +1,1 @@
-python Ants.py
+python ants.py

@@ -10,6 +10,10 @@ class Cell:
     # Set border color
     self.color = (255, 0, 0)
 
+    # Set grid coordinates
+    self.grid_i = i
+    self.grid_j = j
+
     # Set initial pheremone level
     # self.pheremone_level = randint(0, 255)
     self.pheremone_level = 0
@@ -31,8 +35,12 @@ class Cell:
     new = self.pheremone_level + i
 
     # Make sure the levels aren't going out of bounds
-    if new >= 0 and new <= 255:
-      self.pheremone_level = new
+    if new < 0:
+      new = 0
+    elif new > 255:
+      new = 255
+
+    self.pheremone_level = new
 
   # Perform an update on the Cell
   def update(self):

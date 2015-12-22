@@ -16,6 +16,8 @@ class Simulation:
     # Initialize the colony
     self.colony = Colony(self, int(self.dimens[0] / 2), int(self.dimens[1] / 2))
 
+    self.direction_counts = [0, 0, 0, 0, 0, 0, 0, 0]
+
   # Stop the app
   def stop(self):
     self.is_running = False
@@ -47,6 +49,8 @@ class Simulation:
     # Update the colony
     self.colony.update(self.dimens)
 
+    # print(self.direction_counts)
+
   # Get the cell at the given position
   def get_cell_at(self, pos):
     # Get position ad dimensions
@@ -62,6 +66,29 @@ class Simulation:
     # Get Cell at coordinates
     cell = self.cells[grid_x][grid_y]
     return cell
+
+  # Get the eight cells surrounding a position
+  def get_surrounding_cells(self, pos):
+    cells = []
+
+    cell = self.get_cell_at(pos)
+
+    # Calculate the indices of the rows surrounding the cell
+    left_index = (cell.grid_i - 1) % self.grid_size
+    right_index = (cell.grid_i + 1) % self.grid_size
+    top_index = (cell.grid_j - 1) % self.grid_size
+    bottom_index = (cell.grid_j + 1) % self.grid_size
+
+    cells.append(self.cells[left_index][top_index])
+    cells.append(self.cells[cell.grid_i][top_index])
+    cells.append(self.cells[right_index][top_index])
+    cells.append(self.cells[right_index][cell.grid_j])
+    cells.append(self.cells[right_index][bottom_index])
+    cells.append(self.cells[cell.grid_i][bottom_index])
+    cells.append(self.cells[left_index][bottom_index])
+    cells.append(self.cells[left_index][cell.grid_j])
+
+    return cells
 
   # Reset the pheremone levels in the cell at a position
   def reset_cell(self, pos):

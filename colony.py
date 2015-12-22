@@ -1,3 +1,4 @@
+from __future__ import division
 import pygame
 from ant import Ant
 
@@ -17,17 +18,34 @@ class Colony:
     self.radius = 10
     self.color = (0, 0, 255)
 
+    # Set the colony spawn rate
     self.spawn_rate = 50
 
     # Instantiate the list of ants for this colony
     self.ants = []
 
-    # Create initil ants
-    for i in range(0, self.spawn_rate):
-      self.spawn()
+    # Track the spawn number
+    self.spawn_count = 0
 
-  # Update all ants in coloy
+    # Spawn first ant
+    self.spawn()
+    
+  # Increase the spawn count
+  def inc_spawn_count(self, i):
+    self.spawn_count = (self.spawn_count + i)
+
+  # Update colony
   def update(self, dimens):
+    # Increase spawn count
+    self.inc_spawn_count(1)
+
+    # Spawn ants
+    spawn_limit = (1 / self.spawn_rate) * 1000
+    if self.spawn_count > spawn_limit:
+      self.spawn()
+      self.spawn_count = 0
+
+    # Update all ants in colony
     for ant in self.ants:
       ant.update(dimens)
 

@@ -11,14 +11,15 @@ class Ant:
     self.colony = colony
 
     # Set position and dimensions
-    self.x = colony.x
-    self.y = colony.y
+    self.x = colony.x + randint(-20, 20)
+    self.y = colony.y + randint(-20, 20)
     self.w = 5
     self.h = 10
 
     # Set direction variables
-    self.direction = 'S'
-    self.direction_timer = 0
+    self.directions = ['NW', 'N', 'NE', 'E', 'SE', 'S', 'SW', 'SW']
+    self.direction = self.directions[randint(0, len(self.directions) - 1)]
+    self.direction_timer = 20
 
     # Set the color
     self.color = (255, 0, 0)
@@ -61,13 +62,13 @@ class Ant:
     pos_diff = [0, 0]
 
     if 'N' in self.direction:
-      pos_diff[1] = -1
+      pos_diff[1] = -2
     if 'S' in self.direction:
-      pos_diff[1] = 1
+      pos_diff[1] = 2
     if 'E' in self.direction:
-      pos_diff[0] = 1
+      pos_diff[0] = 2
     if 'W' in self.direction:
-      pos_diff[0] = -1
+      pos_diff[0] = -2
 
     new_pos = (self.x + pos_diff[0], self.y + pos_diff[1])
 
@@ -90,19 +91,99 @@ class Ant:
   # Increse pheremone level in current cell
   def leave_pheremones(self):
     cell = self.colony.sim.get_cell_at((self.x, self.y))
-    cell.inc_pheremone_level(40)
+    increment = (255 - cell.pheremone_level) / 5
+    cell.inc_pheremone_level(increment)
 
   # Choose a random direction and an amount of time to follow it
   def update_direction(self):
     if self.direction_timer == 0:
       # Choose new direction
-      directions = ['N', 'S', 'E', 'W', 'NE', 'NW', 'SE', 'SW']
-      choice = randint(0, len(directions) - 1)
-      self.direction = directions[choice]
-      self.direction_timer = randint(5, 50)
+      self.get_direction_from_pheremones()
     else:
       # Count down the timer
       self.inc_direction_timer(-1)
+
+  # Get random direction to move in
+  def get_direction_from_random(self):
+    diff = randint(-2, 2)
+    choice = (self.directions.index(self.direction) + diff) % len(self.directions)
+    self.direction = self.directions[choice]
+    self.direction_timer = randint(15, 30)
+
+    # self.colony.sim.direction_counts[choice] = self.colony.sim.direction_counts[choice] + 1
+
+  # Get direction based on strongest pheremones
+  def get_direction_from_pheremones(self):
+    # Get neighbouring cells
+    neighbours = self.colony.sim.get_surrounding_cells((self.x, self.y))
+
+    # Find strongest pheremones
+    strongest = 0
+    strongest_cell_indices = []
+    choice = 0
+    chosen = False
+
+    # test = []
+
+    for i, cell in enumerate(neighbours):
+      if not self.opposite(i):
+        # print(i)
+        # test.append((cell.grid_i, cell.grid_j))
+        if cell.pheremone_level == strongest:
+          # print('==')
+          # print(cell.pheremone_level)
+          # print(strongest)
+          strongest_cell_indices.append(i)
+        if cell.pheremone_level > strongest:
+          # print('>')
+          # print(cell.pheremone_level)
+          # print(strongest)
+          strongest_cell_indices = []
+          strongest_cell_indices.append(i)
+          strongest = cell.pheremone_level
+          choice = i
+          chosen = True
+
+    # print(test)
+    # print(chosen)
+
+    # if (len(strongest_cell_indices) > 1):
+    #   print(strongest_cell_indices)
+
+    # If there was any winner
+    if chosen:
+      # print('chosen')
+      # Pick one of the top
+      index = randint(0, len(strongest_cell_indices) - 1)
+      choice = strongest_cell_indices[index]
+      self.direction = self.directions[choice]
+      # self.direction_timer = randint(0, 10)
+      self.direction_timer = 5
+
+      # self.colony.sim.direction_counts[choice] = self.colony.sim.direction_counts[choice] + 1
+    else:
+      # Pick one at random
+      self.get_direction_from_random()
+
+
+    # print(self.direction)
+
+
+  # Check whether a chosen direction is opposite the current direction
+  def opposite(self, choice):
+    current_index = self.directions.index(self.direction)
+    # opposite_index = (current_index + 4) % len(self.directions)
+
+    opposite = False
+    # print('')
+    # print(current_index)
+    # print(range(current_index + 3, current_index + 6))
+    for i in range(current_index + 3, current_index + 6):
+      # print(i % (len(self.directions)))
+      if choice == i % (len(self.directions)):
+        opposite = True
+
+    return opposite
 
   # Get the shape to draw based on direction
   def get_shape(self):

@@ -1,6 +1,10 @@
 import pygame
+import random
 from simulation import Simulation
 from event_handler import EventHandler
+
+# Seed random
+random.seed()
 
 # Initialize PyGame
 pygame.init()
@@ -25,9 +29,6 @@ BLACK = (  0,   0,   0)
 # Used to manage how fast the screen updates
 clock = pygame.time.Clock()
 
-# Track the frame number
-frame_count = 0
-
 while sim.is_running:
 
   # print(frame_count)
@@ -50,7 +51,5 @@ while sim.is_running:
 
   # # Limit to 50 FPS
   # clock.tick(50)
-
-  frame_count = frame_count + 1
 
 pygame.quit()
