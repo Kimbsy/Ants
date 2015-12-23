@@ -193,8 +193,6 @@ class Ant:
     self.direction = self.directions[choice]
     self.direction_timer = randint(15, 30)
 
-    # self.colony.sim.direction_counts[choice] = self.colony.sim.direction_counts[choice] + 1
-
   # Get direction based on strongest pheremones
   def get_direction_from_pheremones(self):
     # Get neighbouring cells
@@ -206,63 +204,33 @@ class Ant:
     choice = 0
     chosen = False
 
-    # test = []
-
     for i, cell in enumerate(neighbours):
       if not self.opposite(i):
-        # print(i)
-        # test.append((cell.grid_i, cell.grid_j))
         if cell.pheremone_level == strongest:
-          # print('==')
-          # print(cell.pheremone_level)
-          # print(strongest)
           strongest_cell_indices.append(i)
         if cell.pheremone_level > strongest:
-          # print('>')
-          # print(cell.pheremone_level)
-          # print(strongest)
           strongest_cell_indices = []
           strongest_cell_indices.append(i)
           strongest = cell.pheremone_level
           choice = i
           chosen = True
 
-    # print(test)
-    # print(chosen)
-
-    # if (len(strongest_cell_indices) > 1):
-    #   print(strongest_cell_indices)
-
     # If there was any winner
     if chosen:
-      # print('chosen')
-      # Pick one of the top
       index = randint(0, len(strongest_cell_indices) - 1)
       choice = strongest_cell_indices[index]
       self.direction = self.directions[choice]
-      # self.direction_timer = randint(0, 10)
       self.direction_timer = 5
-
-      # self.colony.sim.direction_counts[choice] = self.colony.sim.direction_counts[choice] + 1
     else:
       # Pick one at random
       self.get_direction_from_random()
 
-
-    # print(self.direction)
-
-
   # Check whether a chosen direction is opposite the current direction
   def opposite(self, choice):
     current_index = self.directions.index(self.direction)
-    # opposite_index = (current_index + 4) % len(self.directions)
 
     opposite = False
-    # print('')
-    # print(current_index)
-    # print(range(current_index + 3, current_index + 6))
     for i in range(current_index + 3, current_index + 6):
-      # print(i % (len(self.directions)))
       if choice == i % (len(self.directions)):
         opposite = True
 
@@ -320,3 +288,7 @@ class Ant:
   # Draw the ant to the surface
   def render(self, surface):
     pygame.draw.polygon(surface, self.color, self.get_shape(), 0)
+
+    # Draw food
+    if self.has_food:
+      pygame.draw.rect(surface, (0, 255, 0), [self.x, self.y, 2, 2], 0)

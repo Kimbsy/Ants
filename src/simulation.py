@@ -27,8 +27,6 @@ class Simulation:
     # Initialize the colony
     self.colony = Colony(self)
 
-    # self.direction_counts = [0, 0, 0, 0, 0, 0, 0, 0]
-
   # Stop the app
   def stop(self):
     self.is_running = False
@@ -49,8 +47,7 @@ class Simulation:
   # Populate food_items list
   def init_food(self):
     for i in range(0, self.food_count):
-      food = Food(self)
-      self.food_items.append(food)
+      self.add_food()
 
   # Update the simulation
   def update(self):
@@ -62,7 +59,18 @@ class Simulation:
     # Update the colony
     self.colony.update(self.dimens)
 
-    # print(self.direction_counts)
+    # Update food items
+    for food in self.food_items:
+      food.update()
+
+  # Add food to list
+  def add_food(self):
+    food = Food(self)
+    self.food_items.append(food)
+
+  # Remove food from list
+  def kill_food(self, food):
+    self.food_items.remove(food)
 
   # Get the cell at the given position
   def get_cell_at(self, pos):

@@ -15,11 +15,11 @@ class Colony:
     self.y = int(self.sim.dimens[1] / 2)
 
     # Set circle to draw
-    self.radius = 10
+    self.radius = 20
     self.color = (0, 0, 255)
 
     # Set the amount of food in the colony
-    self.food_level = 10000
+    self.food_level = 0
 
     # Set the colony spawn rate
     self.spawn_rate = 50
@@ -69,4 +69,11 @@ class Colony:
 
   # Kill specified ant
   def kill(self, ant):
+    # Clear pheremones around ant
+    cell = self.sim.get_cell_at((ant.x, ant.y))
+    cell.pheremone_level = 0
+    for cell in self.sim.get_surrounding_cells((ant.x, ant.y)):
+      cell.pheremone_level = 0
+
+    # Remove ant
     self.ants.remove(ant)

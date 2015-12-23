@@ -6,6 +6,9 @@ class Food:
 
   # Constructor
   def __init__(self, sim):
+    # Keep a reference to the simulation
+    self.sim = sim
+
     # Set position and dimensions
     self.set_position(sim.dimens)
     self.w = 30
@@ -14,6 +17,13 @@ class Food:
     self.food_level = 1000
 
     self.color = (0, 255, 0)
+
+  # Perform an update on the food object
+  def update(self):
+    # If out of food, replace self
+    if self.food_level == 0:
+      self.sim.add_food()
+      self.sim.kill_food(self)
 
   # Position the food in one of the corners of the screen
   def set_position(self, dimens):
