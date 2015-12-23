@@ -6,13 +6,13 @@ class Colony:
   """Colony class creates ants and acts as their nest"""
 
   # Constructor
-  def __init__(self, sim, x, y):
+  def __init__(self, sim):
     # Keep reference to Simulation
     self.sim = sim
 
     # Set position
-    self.x = x
-    self.y = y
+    self.x = int(self.sim.dimens[0] / 2)
+    self.y = int(self.sim.dimens[1] / 2)
 
     # Set circle to draw
     self.radius = 10
@@ -29,7 +29,7 @@ class Colony:
 
     # Spawn first ant
     self.spawn()
-    
+
   # Increase the spawn count
   def inc_spawn_count(self, i):
     self.spawn_count = (self.spawn_count + i)

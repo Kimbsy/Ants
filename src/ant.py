@@ -21,6 +21,10 @@ class Ant:
     self.direction = self.directions[randint(0, len(self.directions) - 1)]
     self.direction_timer = 20
 
+    # Food variables
+    self.has_food = False
+    self.food_energy = 0
+
     # Set the color
     self.color = (255, 0, 0)
 
@@ -91,17 +95,39 @@ class Ant:
   # Increse pheremone level in current cell
   def leave_pheremones(self):
     cell = self.colony.sim.get_cell_at((self.x, self.y))
-    increment = (255 - cell.pheremone_level) / 5
+    increment = (255 - cell.pheremone_level) / 3
     cell.inc_pheremone_level(increment)
 
   # Choose a random direction and an amount of time to follow it
   def update_direction(self):
-    if self.direction_timer == 0:
-      # Choose new direction
-      self.get_direction_from_pheremones()
+    if self.has_food:
+      self.get_direction_home()
     else:
-      # Count down the timer
-      self.inc_direction_timer(-1)
+      if self.direction_timer == 0:
+        # Choose new direction
+        self.get_direction_from_pheremones()
+      else:
+        # Count down the timer
+        self.inc_direction_timer(-1)
+
+  def get_direction_home(self):
+    home_pos = (self.colony.x, self.colony.y)
+
+    d = ''
+
+    # North/South
+    if home_pos[1] > self.y + 5:
+      d = d + 'S'
+    elif home_pos[1] < self.y - 5:
+      d = d + 'N'
+
+    # East/West
+    if home_pos[0] > self.x + 5:
+      d = d + 'E'
+    elif home_pos[0] < self.x - 5:
+      d = d + 'W'
+
+    self.direction = d
 
   # Get random direction to move in
   def get_direction_from_random(self):

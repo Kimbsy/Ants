@@ -2,11 +2,20 @@
 ---
 A small Python app that simulates an ant colony.
 
+You will need to install pygame, Pip is good for this:
+```bash
+# Install python-dev (required by pygame)
+sudo apt-get install python-dev
+# Install Pip
+sudo apt-get install python-pip
+#Use Pip to install pygame
+sudo pip install pygame
+```
+
 To run:
 ```bash
 ./build.sh
 ```
-
 
 Initial behaiviour algorithm goal:
 ```

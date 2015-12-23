@@ -14,10 +14,8 @@ pygame.display.set_caption('Ants')
 size = (700, 700)
 surface = pygame.display.set_mode(size)
 
-# Initialize simulation
-sim = Simulation(surface)
-sim.set_grid_size(75)
-sim.init_cells(surface)
+# Initialize simulation with the surface and grid size
+sim = Simulation(surface, 75)
 
 # Initialize event handler
 e_handler = EventHandler()

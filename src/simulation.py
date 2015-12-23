@@ -1,33 +1,40 @@
 from __future__ import division 
 from cell import Cell
 from colony import Colony
+from food import Food
 import math
 
 class Simulation:
   """Main simulation class"""
 
   # Constuctor
-  def __init__(self, surface):
+  def __init__(self, surface, grid_size):
     self.is_running = True
-    self.grid_size = 0
+    self.grid_size = grid_size
     self.cells = []
+    self.food_items = []
     self.dimens = surface.get_size()
 
-    # Initialize the colony
-    self.colony = Colony(self, int(self.dimens[0] / 2), int(self.dimens[1] / 2))
+    # Initializa the cells
+    self.init_cells()
 
-    self.direction_counts = [0, 0, 0, 0, 0, 0, 0, 0]
+    # Set the number of Food objects availble
+    self.food_count = 1
+
+    # Initialise Food objects
+    self.init_food()
+
+    # Initialize the colony
+    self.colony = Colony(self)
+
+    # self.direction_counts = [0, 0, 0, 0, 0, 0, 0, 0]
 
   # Stop the app
   def stop(self):
     self.is_running = False
 
-  # Set the grid size in cells
-  def set_grid_size(self, size):
-    self.grid_size = size
-
   # Create 2D list of Cell objects
-  def init_cells(self, surface):
+  def init_cells(self):
     # Create grid_size * grid_size array of Cells
     for i in range(0, self.grid_size):
       cell_row = []
@@ -38,6 +45,12 @@ class Simulation:
         # Add it to the sim's cells list
         cell_row.append(cell)
       self.cells.append(cell_row)
+
+  # Populate food_items list
+  def init_food(self):
+    for i in range(0, self.food_count):
+      food = Food(self)
+      self.food_items.append(food)
 
   # Update the simulation
   def update(self):
@@ -102,6 +115,10 @@ class Simulation:
     for cell_row in self.cells:
       for cell in cell_row:
         cell.render(surface)
+
+    # Draw Food
+    for food in self.food_items:
+      food.render(surface)
 
     # Draw colony
     self.colony.render(surface)

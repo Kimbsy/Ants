@@ -1,1 +1,1 @@
-python ants.py
+python src/ants.py
