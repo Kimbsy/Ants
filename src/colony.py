@@ -18,6 +18,9 @@ class Colony:
     self.radius = 10
     self.color = (0, 0, 255)
 
+    # Set the amount of food in the colony
+    self.food_level = 10000
+
     # Set the colony spawn rate
     self.spawn_rate = 50
 

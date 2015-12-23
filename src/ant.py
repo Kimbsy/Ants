@@ -11,25 +11,25 @@ class Ant:
     self.colony = colony
 
     # Set position and dimensions
-    self.x = colony.x + randint(-20, 20)
-    self.y = colony.y + randint(-20, 20)
+    self.x = colony.x + randint(-200, 200)
+    self.y = colony.y + randint(-200, 200)
     self.w = 5
     self.h = 10
 
     # Set direction variables
-    self.directions = ['NW', 'N', 'NE', 'E', 'SE', 'S', 'SW', 'SW']
+    self.directions = ['NW', 'N', 'NE', 'E', 'SE', 'S', 'SW', 'W']
     self.direction = self.directions[randint(0, len(self.directions) - 1)]
     self.direction_timer = 20
 
     # Food variables
     self.has_food = False
-    self.food_energy = 0
+    self.food_level = 0
 
     # Set the color
     self.color = (255, 0, 0)
 
     # Set starting energy level
-    self.energy = 500
+    self.energy = 1000
 
   # Change the energy level of the ant
   def increment_energy(self, i):
@@ -50,6 +50,7 @@ class Ant:
   # Perform an update on the ant
   def update(self, dimens):
     self.update_pos(dimens)
+    self.check_collisions()
     self.update_energy()
     self.leave_pheremones()
     self.update_direction()
@@ -88,6 +89,55 @@ class Ant:
 
     return new_pos
 
+  # Check if the ant has hit something
+  def check_collisions(self):
+    if self.has_food:
+      self.check_home_collisions()
+    else:
+      self.check_food_collisions()
+
+  # Check if the ant is at home
+  def check_home_collisions(self):
+    # Check horizontal
+    horizontal = self.x < self.colony.x + self.colony.radius and self.x > self.colony.x - self.colony.radius
+
+    # Check vertical
+    vertical = self.y < self.colony.y + self.colony.radius and self.y > self.colony.y - self.colony.radius
+
+    if horizontal and vertical:
+      # Deposit food
+      self.colony.food_level = self.colony.food_level + self.food_level
+      self.food_level = 0
+      self.has_food = False
+
+      # Turn around
+      self.reverse_direction()
+
+  # Reverse current direction
+  def reverse_direction(self):
+    current_index = self.directions.index(self.direction)
+    opposite_index = (current_index + 4) % len(self.directions)
+    self.direction = self.directions[opposite_index]
+
+  # Check if the ant has found food
+  def check_food_collisions(self):
+    for food in self.colony.sim.food_items:
+      if not self.has_food:
+        radius = food.w / 2
+
+        # Check horizontal
+        horizontal = self.x < food.x + radius and self.x > food.x - radius
+
+        # Check vertical
+        vertical = self.y < food.y + radius and self.y > food.y - radius
+
+        if horizontal and vertical:
+          # Grab food
+          self.energy = 1000
+          self.food_level = self.food_level + 100
+          food.food_level = food.food_level - 100
+          self.has_food = True
+
   # Update the ant's energy level
   def update_energy(self):
     self.increment_energy(-1)
@@ -95,7 +145,14 @@ class Ant:
   # Increse pheremone level in current cell
   def leave_pheremones(self):
     cell = self.colony.sim.get_cell_at((self.x, self.y))
-    increment = (255 - cell.pheremone_level) / 3
+
+    # Diffierent levels based on carrying food
+    if self.has_food:
+      amount = 255
+    else:
+      amount = (255 - cell.pheremone_level) / 10
+
+    increment = amount
     cell.inc_pheremone_level(increment)
 
   # Choose a random direction and an amount of time to follow it

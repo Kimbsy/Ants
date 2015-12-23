@@ -11,7 +11,7 @@ class Food:
     self.w = 30
     self.h = 30
 
-    self.energy_level = 1000
+    self.food_level = 1000
 
     self.color = (0, 255, 0)
 
